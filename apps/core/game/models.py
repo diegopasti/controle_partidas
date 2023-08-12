@@ -9,7 +9,7 @@ class Player(models.Model):
         verbose_name = "Jogador"
         verbose_name_plural = "Jogadores"
 
-    name = models.CharField(_('Nome'), max_length=50, blank=False)
+    name = models.CharField(_('Nome'), max_length=50, unique=True, blank=False)
     best_of_team = models.IntegerField("Melhor do time", default=0, blank=True)
     best_of_match = models.IntegerField("Melhor da partida", default=0, blank=True)
 
@@ -23,19 +23,19 @@ class Player(models.Model):
     gols_rate = models.IntegerField("Gols por Partidas", default=0, blank=True)
 
     victories = models.IntegerField("Total de Vitórias", default=0, blank=True)
-    losses = models.IntegerField("Total de Gols", default=0, blank=True)
+    losses = models.IntegerField("Total de Derrotas", default=0, blank=True)
     empaths = models.IntegerField("Total de Empates", default=0, blank=True)
 
     victories_rate = models.DecimalField(
-        "Percentual de Vitórias", max_digits=10, decimal_places=2, blank=True
+        "Percentual de Vitórias", max_digits=10, decimal_places=2, blank=True, default=0
     )
 
     losses_rate = models.DecimalField(
-        "Percentual de Derrotas", max_digits=10, decimal_places=2, blank=True
+        "Percentual de Derrotas", max_digits=10, decimal_places=2, blank=True, default=0
     )
 
     empaths_rate = models.DecimalField(
-        "Percentual de Empates", max_digits=10, decimal_places=2, blank=True
+        "Percentual de Empates", max_digits=10, decimal_places=2, blank=True, default=0
     )
 
     created_by = models.ForeignKey(
@@ -82,15 +82,15 @@ class Team(models.Model):
     empaths = models.IntegerField("Total de Empates", default=0, blank=True)
 
     victories_rate = models.DecimalField(
-        "Percentual de Vitórias", max_digits=10, decimal_places=2, blank=True
+        "Percentual de Vitórias", max_digits=10, decimal_places=2, blank=True, default=0
     )
 
     losses_rate = models.DecimalField(
-        "Percentual de Derrotas", max_digits=10, decimal_places=2, blank=True
+        "Percentual de Derrotas", max_digits=10, decimal_places=2, blank=True, default=0
     )
 
     empaths_rate = models.DecimalField(
-        "Percentual de Empates", max_digits=10, decimal_places=2, blank=True
+        "Percentual de Empates", max_digits=10, decimal_places=2, blank=True, default=0
     )
 
     created_by = models.ForeignKey(
