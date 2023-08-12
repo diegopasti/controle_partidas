@@ -19,16 +19,16 @@ class PlayerAdmin(admin.ModelAdmin):
     )
 
     def gols_per_match(self, obj):
-        return self.double_row(obj.gols_rate, obj.gols)
+        return self.double_row(f'{obj.gols_rate}%', f'{obj.gols} Totais')
 
     def victories_result(self, obj):
-        return self.double_row(obj.victories_rate, obj.victories)
+        return self.double_row(f'{obj.victories_rate}%', f'{obj.victories} Totais')
 
     def losses_result(self, obj):
-        return self.double_row(obj.losses_rate, obj.losses)
+        return self.double_row(f'{obj.losses_rate}%', f'{obj.losses} Totais')
 
     def empaths_result(self, obj):
-        return self.double_row(obj.empaths_rate, obj.empaths)
+        return self.double_row(f'{obj.empaths_rate}%', f'{obj.empaths} Total')
 
     def best_per_match(self, obj):
         return self.double_row(f"{obj.best_of_match} vezes", f"em {obj.total_matchs} Partidas")
