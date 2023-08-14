@@ -2,28 +2,16 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import gettext_lazy as _
 
+from apps.core.models import BaseModel
 
-class Player(models.Model):
+
+class ResultFields(models.Model):
+
     class Meta:
-        db_table = "apps_core_game_player"
-        verbose_name = "Jogador"
-        verbose_name_plural = "Jogadores"
-
-    name = models.CharField(_('Nome'), max_length=50, unique=True, blank=False)
-    best_of_team = models.IntegerField("Melhor do time", default=0, blank=True)
-    best_of_match = models.IntegerField("Melhor da partida", default=0, blank=True)
-
-    matchs = models.ManyToManyField('Match', blank=True)
-    total_matchs = models.IntegerField("Total de Partidas", default=0, blank=True)
-
-    rounds = models.ManyToManyField('Round', blank=True)
-    total_rounds = models.IntegerField("Total de Rodadas", default=0, blank=True)
-
-    gols = models.IntegerField("Total de Gols", default=0, blank=True)
-    gols_rate = models.IntegerField("Gols por Partidas", default=0, blank=True)
+        abstract = True
 
     victories = models.IntegerField("Total de Vitórias", default=0, blank=True)
-    losses = models.IntegerField("Total de Derrotas", default=0, blank=True)
+    losses = models.IntegerField("Total de Gols", default=0, blank=True)
     empaths = models.IntegerField("Total de Empates", default=0, blank=True)
 
     victories_rate = models.DecimalField(
@@ -38,23 +26,36 @@ class Player(models.Model):
         "Percentual de Empates", max_digits=10, decimal_places=2, blank=True, default=0
     )
 
-    created_by = models.ForeignKey(
-        User, related_name="%(app_label)s_%(class)s_created_by", null=True, blank=True, on_delete=models.DO_NOTHING
+
+class Player(BaseModel, ResultFields):
+    class Meta:
+        db_table = "apps_core_game_player"
+        verbose_name = "Jogador"
+        verbose_name_plural = "Jogadores"
+
+    name = models.CharField(_('Nome'), max_length=50, unique=True, blank=False)
+    total_matchs = models.IntegerField("Total de Partidas", default=0, blank=True)
+    total_rounds = models.IntegerField("Total de Rodadas", default=0, blank=True)
+    gols = models.IntegerField("Total de Gols", default=0, blank=True)
+    gols_rate = models.IntegerField("Gols por Partidas", default=0, blank=True)
+
+    best_of_team = models.IntegerField(
+        "Melhor do time", default=0, blank=True,
+        help_text="Número de vezes em que foi o melhor do time em uma partida")
+
+    best_of_match = models.IntegerField(
+        "Melhor da partida", default=0, blank=True,
+        help_text="Número de vezes em que foi o melhor da partida"
     )
 
-    updated_by = models.ForeignKey(
-        User, related_name="%(app_label)s_%(class)s_updated_by", null=True, blank=True, on_delete=models.DO_NOTHING
-    )
-
-    creation_date = models.DateTimeField(_('Data de criação'), null=True, auto_now_add=True)
-    last_update = models.DateTimeField(_('Última atualização'), null=True, auto_now=True)
-    is_active = models.BooleanField(_('Ativo'), null=False, default=True)
+    matchs = models.ManyToManyField('Match', verbose_name=_("Partidas"), blank=True)
+    rounds = models.ManyToManyField('Round', verbose_name=_("Rodadas"), blank=True)
 
     def __str__(self):
         return self.name
 
 
-class Team(models.Model):
+class Team(BaseModel, ResultFields):
     class Meta:
         db_table = "apps_core_game_team"
         verbose_name = "Time"
@@ -77,33 +78,7 @@ class Team(models.Model):
     total_round_average = models.IntegerField("Media de duração das rodadas")
 
     gols = models.IntegerField("Total de Gols", default=0, blank=True)
-    victories = models.IntegerField("Total de Vitórias", default=0, blank=True)
-    losses = models.IntegerField("Total de Gols", default=0, blank=True)
-    empaths = models.IntegerField("Total de Empates", default=0, blank=True)
 
-    victories_rate = models.DecimalField(
-        "Percentual de Vitórias", max_digits=10, decimal_places=2, blank=True, default=0
-    )
-
-    losses_rate = models.DecimalField(
-        "Percentual de Derrotas", max_digits=10, decimal_places=2, blank=True, default=0
-    )
-
-    empaths_rate = models.DecimalField(
-        "Percentual de Empates", max_digits=10, decimal_places=2, blank=True, default=0
-    )
-
-    created_by = models.ForeignKey(
-        User, related_name="%(app_label)s_%(class)s_created_by", null=True, blank=True, on_delete=models.DO_NOTHING
-    )
-
-    updated_by = models.ForeignKey(
-        User, related_name="%(app_label)s_%(class)s_updated_by", null=True, blank=True, on_delete=models.DO_NOTHING
-    )
-
-    creation_date = models.DateTimeField(_('Data de criação'), null=True, auto_now_add=True)
-    last_update = models.DateTimeField(_('Última atualização'), null=True, auto_now=True)
-    is_active = models.BooleanField(_('Ativo'), null=False, default=True)
 
 
 class Match(models.Model):
