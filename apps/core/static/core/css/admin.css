@@ -1,0 +1,57 @@
+#changelist-search div input[type=text]{
+    width: -webkit-fill-available;
+}
+
+#changelist-search div label, #changelist-search div input[type=submit]{
+    display: None;
+}
+
+.actions {
+    position:relative;
+    top: 5px !important;
+}
+
+.actions select {
+    margin-left: -43px !important;
+}
+
+.paginator{
+    float: right;
+    position: relative;
+    top: -40px;
+    border-bottom: none !important;
+    border-top: none !important;
+}
+
+#result_list tbody th {
+    white-space: nowrap !important;
+}
+
+#result_list tbody tr td{
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+}
+
+.action-checkbox {
+    vertical-align: middle;
+}
+
+.column-*, .field-* {
+    background: red !important;
+    white-space: nowrap !important;
+}
+
+.column-best_per_team, .column-best_per_match, .column-gols_per_match, .column-victories_result,
+.column-losses_result, .column-empaths_result, .column-created, .column-updated {
+    text-align:center !important;
+    white-space: nowrap;
+}
+
+.column-best_per_team, .column-best_per_match {
+    width: 80px;
+}
+
+.column-gols_per_match, .column-victories_result,
+.column-losses_result, .column-empaths_result, .column-created, .column-updated {
+    width: 70px;
+}
