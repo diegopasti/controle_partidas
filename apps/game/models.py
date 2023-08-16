@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import gettext_lazy as _
@@ -29,7 +31,7 @@ class ResultFields(models.Model):
 
 class Player(BaseModel, ResultFields):
     class Meta:
-        db_table = "apps_core_game_player"
+        db_table = "apps_game_player"
         verbose_name = "Jogador"
         verbose_name_plural = "Jogadores"
 
@@ -55,35 +57,9 @@ class Player(BaseModel, ResultFields):
         return self.name
 
 
-class Team(BaseModel, ResultFields):
-    class Meta:
-        db_table = "apps_core_game_team"
-        verbose_name = "Time"
-        verbose_name_plural = "Times"
-
-    date = models.DateField()
-
-    players = models.ManyToManyField(Player)
-
-    best_player = models.ForeignKey(
-        Player, related_name="%(app_label)s_%(class)s_best_player", null=True, blank=True, on_delete=models.DO_NOTHING
-    )
-
-    match = models.ForeignKey(
-        Player, related_name="%(app_label)s_%(class)s_match", null=True, blank=True, on_delete=models.DO_NOTHING
-    )
-
-    total_rounds = models.IntegerField("Total de Rodadas", default=0, blank=True)
-    total_round_duration = models.IntegerField("Total de duração das rodadas")
-    total_round_average = models.IntegerField("Media de duração das rodadas")
-
-    gols = models.IntegerField("Total de Gols", default=0, blank=True)
-
-
-
 class Match(models.Model):
     class Meta:
-        db_table = "apps_core_game_match"
+        db_table = "apps_game_match"
         verbose_name = "Jogador"
         verbose_name_plural = "Jogadores"
 
@@ -97,6 +73,7 @@ class Match(models.Model):
     )
 
     total_players = models.IntegerField("Total de Jogadores", default=0, blank=True)
+    total_teams = models.IntegerField("Total de Times", default=0, blank=True)
 
     total_rounds = models.IntegerField("Total de Partidas", default=0, blank=True)
 
@@ -118,10 +95,42 @@ class Match(models.Model):
     is_active = models.BooleanField(_('Ativo'), null=False, default=True)
 
 
+class Team(BaseModel, ResultFields):
+    class Meta:
+        db_table = "apps_game_team"
+        verbose_name = "Time"
+        verbose_name_plural = "Times"
+
+    match = models.ForeignKey(
+        Match, related_name="%(app_label)s_%(class)s_match", verbose_name="Partida",
+        null=True, blank=True, on_delete=models.DO_NOTHING
+    )
+
+    code = models.IntegerField("Codigo", default=1, null=True, blank=True)
+
+    name = models.CharField(_('Nome do Time'), max_length=50, blank=False)
+
+    players = models.ManyToManyField(Player, verbose_name="Jogadores")
+
+    best_player = models.ForeignKey(
+        Player, related_name="%(app_label)s_%(class)s_best_player", verbose_name="Melhor jogador do Time",
+        null=True, blank=True, on_delete=models.DO_NOTHING
+    )
+
+    gols = models.IntegerField("Total de Gols", default=0, blank=True)
+    total_rounds = models.IntegerField("Total de Rodadas", default=0, blank=True)
+    total_round_duration = models.DurationField(
+        "Tempo total em jogo", default=timedelta(seconds=0), null=True, blank=True
+    )
+    total_round_average = models.DurationField(
+        "Tempo médio por rodada", default=timedelta(seconds=0), null=True, blank=True
+    )
+
+
 class Round(models.Model):
 
     class Meta:
-        db_table = "apps_core_game_round"
+        db_table = "apps_game_round"
         verbose_name = "Rodada"
         verbose_name_plural = "Rodada"
 
