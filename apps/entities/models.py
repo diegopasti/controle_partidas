@@ -24,6 +24,7 @@ class Company(BaseModel):
     def __str__(self):
         return self.name.upper()
 
+
 class Group(BaseModel):
 
     class Meta:
@@ -55,7 +56,7 @@ class Group(BaseModel):
 
     owner = models.ForeignKey(User, verbose_name="Responsável", null=False, on_delete=models.DO_NOTHING)
     status = models.CharField("Status do Grupo", max_length=20, choices=STATUS, blank=False)
-    type = models.CharField("Tipo de Grupo", max_length=20, choices=STATUS, blank=False)
+    type = models.CharField("Tipo de Grupo", max_length=20, choices=TYPE, blank=False)
     days = MultiSelectField("Dias de Jogo", choices=DAYS, max_choices=7, max_length=10, null=True, blank=True)
     matches = models.IntegerField("Total de Partidas", default=0, blank=True)
 

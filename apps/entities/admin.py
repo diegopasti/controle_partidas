@@ -27,7 +27,7 @@ class AreaAdmin(BaseModelAdmin):
     actions_on_bottom = True
     actions_on_top = False
     search_fields = ['owner']
-    list_filter = ["company", "status", "type"]
+    list_filter = ["company","company__city", "status", "type"]
     list_display = ["area", "local", "value"]
 
     def area(self, obj):

@@ -50,21 +50,23 @@ class PlayerAdmin(ResultAdmin):
         "created", "updated"
     )
 
+    add_fieldsets = (
+        ("Jogador", {
+            "fields": ("name", )
+        }),
+    )
+
     fieldsets = (
         ("Jogador", {
-            "fields": ("name", "total_matchs", "total_rounds", "gols", "gols_rate", "best_of_team", "best_of_match",)
+            "fields": ("name", "total_matches", "total_gols", "gols_rate", "best_of_team", "best_of_match",)
         }),
 
         ("Partidas", {
-            "fields": ("matchs",)
-        }),
-
-        ("Rodadas", {
-            "fields": ("rounds",)
+            "fields": ("matches",)
         }),
 
         ("Alterações", {
-            "fields": ("created_by", "creation_date", "updated_by", "last_update", "is_active")
+            "fields": ("user", "created_by", "creation_date", "updated_by", "last_update", "is_active")
         }),
     )
 
@@ -80,24 +82,24 @@ class PlayerAdmin(ResultAdmin):
             player.updated_by = request.user
             player.save()
 
-    def get_form(self, request, obj=None, **kwargs):
+    def get_fieldsets(self, request, obj=None, **kwargs):
         """
         Use special form during foo creation
         """
-        defaults = {}
+
         if obj is None:
-            defaults["form"] = self.add_form
-        defaults.update(kwargs)
-        return super().get_form(request, obj, **defaults)
+            return self.add_fieldsets
+
+        return self.fieldsets
 
     def gols_per_match(self, obj):
         return self.double_row(f"{obj.total_gols}", f"{obj.gols_rate} POR PARTIDA")
 
     def best_per_match(self, obj):
-        return self.double_row(f"{obj.best_of_match} vezes", f"EM {obj.total_matchs} PARTIDAS")
+        return self.double_row(f"{obj.best_of_match} vezes", f"EM {obj.total_matches} PARTIDAS")
 
     def best_per_team(self, obj):
-        return self.double_row(f"{obj.best_of_team} vezes", f"EM {obj.total_matchs} PARTIDAS")
+        return self.double_row(f"{obj.best_of_team} vezes", f"EM {obj.total_matches} PARTIDAS")
 
     gols_per_match.allow_tags = True
     gols_per_match.short_description = "Gols"

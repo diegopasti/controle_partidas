@@ -23,11 +23,16 @@
     border-top: none !important;
 }
 
-#result_list tbody th {
+.column-* {
+    white-space: nowrap !important;
+}
+
+#result_list tbody th, #result_list tbody td  {
     white-space: nowrap !important;
 }
 
 #result_list tbody tr td{
+    vertical-align: middle;
     padding-top: 2px !important;
     padding-bottom: 2px !important;
 }
@@ -36,14 +41,9 @@
     vertical-align: middle;
 }
 
-.column-*, .field-* {
-    white-space: nowrap !important;
-}
-
 .column-best_per_team, .column-best_per_match, .column-gols_per_match, .column-victories_result,
 .column-losses_result, .column-empaths_result, .column-created, .column-updated {
     text-align:center !important;
-    white-space: nowrap;
 }
 
 .column-best_per_team, .column-best_per_match {
@@ -58,7 +58,6 @@
 
 .column-area{
     text-align: left !important;
-    white-space: nowrap;
     width: 100px;
 }
 
@@ -68,8 +67,3 @@
     width: 100px;
 }
 
-.field-area {
-    text-align: left !important;
-    white-space: nowrap;
-    width: 100px;
-}
