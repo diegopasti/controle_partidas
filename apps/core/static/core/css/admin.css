@@ -37,7 +37,6 @@
 }
 
 .column-*, .field-* {
-    background: red !important;
     white-space: nowrap !important;
 }
 
@@ -54,4 +53,23 @@
 .column-gols_per_match, .column-victories_result,
 .column-losses_result, .column-empaths_result, .column-created, .column-updated {
     width: 70px;
+}
+
+
+.column-area{
+    text-align: left !important;
+    white-space: nowrap;
+    width: 100px;
+}
+
+.column-value{
+    text-align: center !important;
+    white-space: nowrap;
+    width: 100px;
+}
+
+.field-area {
+    text-align: left !important;
+    white-space: nowrap;
+    width: 100px;
 }

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_admin_filters',
 
     'apps.core',
+    'apps.entities',
     'apps.game'
 ]
 

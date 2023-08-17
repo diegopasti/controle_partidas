@@ -39,9 +39,7 @@ class PlayerAdmin(ResultAdmin):
     actions_on_bottom = True
     actions_on_top = False
     search_fields = ['name']
-    list_filter = ["gols", "best_of_match", "best_of_team", "created_by", "updated_by"]
-
-
+    list_filter = ["best_of_match", "best_of_team", "created_by", "updated_by"]
 
     add_form = CreationPlayerForm
 
@@ -93,7 +91,7 @@ class PlayerAdmin(ResultAdmin):
         return super().get_form(request, obj, **defaults)
 
     def gols_per_match(self, obj):
-        return self.double_row(f"{obj.gols}", f"{obj.gols_rate} POR PARTIDA")
+        return self.double_row(f"{obj.total_gols}", f"{obj.gols_rate} POR PARTIDA")
 
     def best_per_match(self, obj):
         return self.double_row(f"{obj.best_of_match} vezes", f"EM {obj.total_matchs} PARTIDAS")

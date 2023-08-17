@@ -56,9 +56,9 @@ class BaseModelAdmin(admin.ModelAdmin):
         message = format_html("<div style='width:0px;'></div>")
         return message
 
-    def double_row(self, first_value, second_value):
+    def double_row(self, first_value, second_value, align="center"):
         message = format_html(
-            f"<div style='text-align:center;white-space: nowrap;'>"
+            f"<div style='text-align:{align};white-space: nowrap;'>"
             f"{first_value}<br><span style='font-size:9px;color:#777;'>"
             f"{second_value}</span>"
             f"</div>"
