@@ -60,6 +60,9 @@ class Group(BaseModel):
     days = MultiSelectField("Dias de Jogo", choices=DAYS, max_choices=7, max_length=10, null=True, blank=True)
     matches = models.IntegerField("Total de Partidas", default=0, blank=True)
 
+    def __str__(self):
+        return self.owner.first_name
+
 
 class Area(BaseModel):
     class Meta:
@@ -89,3 +92,9 @@ class Area(BaseModel):
         "Pessoas por Time", default=5, blank=False,
         validators=[MinValueValidator(5), MaxValueValidator(11)],
     )
+
+    def __str__(self):
+        message = f"{self.company.name} - {self.type}"
+        if self.name:
+            message += f" - {self.name}"
+        return message

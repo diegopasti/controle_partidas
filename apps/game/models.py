@@ -76,12 +76,24 @@ class Booking(BaseModel, ResultFields):
         ('CANCELADA', 'CANCELADA'),
     )
 
-    group = models.ForeignKey("entities.Group", null=True, blank=True, on_delete=models.DO_NOTHING)
-    owner = models.ForeignKey(
-        "auth.User", related_name="%(app_label)s_%(class)s_owner", null=False, blank=False, on_delete=models.DO_NOTHING
+    company = models.ForeignKey(
+        "entities.Company", verbose_name="Empresa", null=False, on_delete=models.DO_NOTHING
+
     )
-    company = models.ForeignKey("entities.Company", null=False, on_delete=models.DO_NOTHING)
-    area = models.ForeignKey("entities.Area", null=False, on_delete=models.DO_NOTHING)
+
+    area = models.ForeignKey(
+        "entities.Area", verbose_name="Quadra ou Campo", null=False, on_delete=models.DO_NOTHING
+    )
+
+    group = models.ForeignKey(
+        "entities.Group", verbose_name="Grupo", null=True, blank=True, on_delete=models.DO_NOTHING
+    )
+
+    owner = models.ForeignKey(
+        "auth.User", null=False, blank=False, on_delete=models.DO_NOTHING,
+        verbose_name = "Responsável", related_name = "%(app_label)s_%(class)s_owner",
+    )
+
     date = models.DateField(_("Data"), null=False)
     hour = models.TimeField(_('Horário'), null=False)
 
@@ -106,35 +118,31 @@ class Booking(BaseModel, ResultFields):
 class Match(BaseModel):
     class Meta:
         db_table = "apps_game_matches"
-        verbose_name = "Jogador"
-        verbose_name_plural = "Jogadores"
+        verbose_name = "Partida"
+        verbose_name_plural = "Partidas"
 
-    start = models.DateTimeField()
-    finish = models.DateTimeField()
-    duration = models.DurationField()
+    booking = models.ForeignKey(
+        "Booking", null=False, blank=False, on_delete=models.DO_NOTHING,
+        verbose_name="Reserva", related_name="%(app_label)s_%(class)s_booking",
+    )
+
+    start = models.DateTimeField("Início", null=True, blank=True)
+    finish = models.DateTimeField("Término", null=True, blank=True)
+    duration = models.DurationField("Duração", null=True, blank=True)
 
     first_team = models.ForeignKey(
-        "Team", related_name="%(app_label)s_%(class)s_first_team", null=True, blank=True, on_delete=models.DO_NOTHING
+        "Team", null=True, blank=True, on_delete=models.DO_NOTHING,
+        verbose_name="Primeiro Time", related_name="%(app_label)s_%(class)s_first_team"
     )
 
     second_team = models.ForeignKey(
-        "Team", related_name="%(app_label)s_%(class)s_second_team", null=True, blank=True, on_delete=models.DO_NOTHING
+        "Team", null=True, blank=True, on_delete=models.DO_NOTHING,
+        verbose_name="Segundo Time", related_name="%(app_label)s_%(class)s_second_team"
     )
-
-    players = models.ManyToManyField("Player", verbose_name="Jogadores")
-    best_player = models.ForeignKey(
-        "Player", related_name="%(app_label)s_%(class)s_best_player", null=True, blank=True, on_delete=models.DO_NOTHING
-    )
-
-    total_players = models.IntegerField("Total de Jogadores", default=0, blank=True)
-    total_teams = models.IntegerField("Total de Times", default=0, blank=True)
-
-    total_rounds = models.IntegerField("Total de Partidas", default=0, blank=True)
 
     gols = models.IntegerField("Total de Gols", default=0, blank=True)
-    victories = models.IntegerField("Total de Vitórias", default=0, blank=True)
-    losses = models.IntegerField("Total de Gols", default=0, blank=True)
-    empaths = models.IntegerField("Total de Empates", default=0, blank=True)
+    first_team_gols = models.IntegerField("Gols do Primeiro Time", default=0, blank=True)
+    second_team_gols = models.IntegerField("Gols do Segundo Time", default=0, blank=True)
 
 
 class Team(BaseModel, ResultFields):

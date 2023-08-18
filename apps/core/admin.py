@@ -11,6 +11,7 @@ class StatusFilter(MultiChoice):
     FILTER_LABEL = "By status"
 
 
+
 class BaseModelAdmin(admin.ModelAdmin):
 
     class Media:
