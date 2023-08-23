@@ -16,11 +16,7 @@
 }
 
 .paginator{
-    float: right;
-    position: relative;
-    top: -40px;
-    border-bottom: none !important;
-    border-top: none !important;
+
 }
 
 .column-* {

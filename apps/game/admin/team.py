@@ -15,15 +15,14 @@ class TeamAdmin(ResultAdmin):
     ]
 
     list_display = (
-        "match", "best_player", "total_time",
-        "total_rounds", "total_round_duration", "total_round_average",
-        "victories_result", "losses_result", "empaths_result", "column_separator",
-        "created", "updated"
+        #"booking",
+        "code", "name", "best_player", "gols", #"total_rounds", "total_round_duration",
+        #"total_round_average", "column_separator", "created", "updated"
     )
 
     fieldsets = (
         ("Jogadores", {
-         "fields": ("match", "name", "players",)
+         "fields": ("booking", "name", "players",)
         }),
 
         ("Resultados", {
@@ -37,7 +36,7 @@ class TeamAdmin(ResultAdmin):
 
     add_fieldsets = (
         ("Geral", {
-            "fields": ("match", "players",)
+            "fields": ("booking", "name", "players",)
         }),
     )
 
@@ -47,6 +46,8 @@ class TeamAdmin(ResultAdmin):
         if not obj:
             return self.add_fieldsets
         return super(TeamAdmin, self).get_fieldsets(request, obj)
+
+
 
     def best_player(self, obj):
         return self.double_row(f"{obj.best_player}", f"")

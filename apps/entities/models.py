@@ -22,7 +22,7 @@ class Company(BaseModel):
     city = models.CharField(_('Cidade'), max_length=50, blank=True)
 
     def __str__(self):
-        return self.name.upper()
+        return self.name #.upper()
 
 
 class Group(BaseModel):
@@ -55,13 +55,14 @@ class Group(BaseModel):
     )
 
     owner = models.ForeignKey(User, verbose_name="Responsável", null=False, on_delete=models.DO_NOTHING)
+    name = models.CharField("Nome do Grupo", max_length=50, blank=False)
     status = models.CharField("Status do Grupo", max_length=20, choices=STATUS, blank=False)
     type = models.CharField("Tipo de Grupo", max_length=20, choices=TYPE, blank=False)
     days = MultiSelectField("Dias de Jogo", choices=DAYS, max_choices=7, max_length=10, null=True, blank=True)
     matches = models.IntegerField("Total de Partidas", default=0, blank=True)
 
     def __str__(self):
-        return self.owner.first_name
+        return self.owner.__str__().upper()
 
 
 class Area(BaseModel):

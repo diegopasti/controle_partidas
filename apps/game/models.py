@@ -86,23 +86,23 @@ class Booking(BaseModel, ResultFields):
     )
 
     group = models.ForeignKey(
-        "entities.Group", verbose_name="Grupo", null=True, blank=True, on_delete=models.DO_NOTHING
+        "entities.Group", verbose_name="Grupo", null=False, blank=False, on_delete=models.DO_NOTHING
     )
 
     owner = models.ForeignKey(
         "auth.User", null=False, blank=False, on_delete=models.DO_NOTHING,
-        verbose_name = "Responsável", related_name = "%(app_label)s_%(class)s_owner",
+        verbose_name="Responsável", related_name="%(app_label)s_%(class)s_owner",
     )
 
     date = models.DateField(_("Data"), null=False)
     hour = models.TimeField(_('Horário'), null=False)
 
-    status = models.CharField("Status", max_length=10, choices=STATUS, blank=False)
+    status = models.CharField("Status", max_length=10, choices=STATUS, default="AGUARDANDO", blank=False)
     players = models.ManyToManyField("Player", verbose_name=_('Jogadores'))
 
-    start = models.DateTimeField(_('Início da Partida'))
-    finish = models.DateTimeField(_('Término da Partida'))
-    duration = models.DurationField(_('Duração Partida'))
+    start = models.DateTimeField(_('Início da Partida'), null=True, blank=True)
+    finish = models.DateTimeField(_('Término da Partida'), null=True, blank=True)
+    duration = models.DurationField(_('Duração Partida'), null=True, blank=True)
 
     best_player = models.ForeignKey(
         "Player", null=True, blank=True, on_delete=models.DO_NOTHING,
@@ -113,6 +113,9 @@ class Booking(BaseModel, ResultFields):
     total_teams = models.IntegerField("Total de Times", default=0, blank=True)
     total_matches = models.IntegerField("Total de Partidas", default=0, blank=True)
     total_gols = models.IntegerField("Total de Gols", default=0, blank=True)
+
+    def __str__(self):
+        return f"{self.date} - {self.hour} - {self.company} - {self.group}"
 
 
 class Match(BaseModel):
@@ -151,9 +154,9 @@ class Team(BaseModel, ResultFields):
         verbose_name = "Time"
         verbose_name_plural = "Times"
 
-    match = models.ForeignKey(
-        "Match", related_name="%(app_label)s_%(class)s_match", verbose_name="Partida",
-        null=True, blank=True, on_delete=models.DO_NOTHING
+    booking = models.ForeignKey(
+        "Booking", related_name="%(app_label)s_%(class)s_booking", verbose_name="Reserva",
+        null=False, blank=False, on_delete=models.DO_NOTHING
     )
 
     code = models.IntegerField("Codigo", default=1, null=True, blank=True)
