@@ -65,8 +65,8 @@ class BookingAdmin(ResultAdmin):
 
             for item in range(booking.total_teams):
                 team = Team()
-                team.code = item
-                team.name = f"Time{item}"
+                team.code = item+1
+                team.name = f"Time{item+1}"
                 initial_position = item*max_players
                 end_position = (item+1)*max_players
                 team.save()

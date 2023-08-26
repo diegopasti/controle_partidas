@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.core.exceptions import FieldError
 from django.db import models
-from django.forms import TextInput, Select, SelectMultiple, DateInput, DateTimeInput
+from django.forms import TextInput, Select, SelectMultiple
 from django.utils.html import format_html
 
 from django_admin_filters import MultiChoice
@@ -9,7 +9,6 @@ from django_admin_filters import MultiChoice
 
 class StatusFilter(MultiChoice):
     FILTER_LABEL = "By status"
-
 
 
 class BaseModelAdmin(admin.ModelAdmin):
@@ -22,14 +21,18 @@ class BaseModelAdmin(admin.ModelAdmin):
 
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={"style": "min-width:100vh"})},
+        models.URLField: {'widget': TextInput(attrs={"style": "min-width:100vh"})},
         models.IntegerField: {'widget': TextInput(attrs={"style": "min-width:100vh"})},
         models.DecimalField: {'widget': TextInput(attrs={"style": "width:100vh"})},
+        models.Choices: {'widget': Select(attrs={"style": "width:100vh"})},
         #models.DateTimeField: {'widget': DateTimeInput(attrs={"style": "width:100vh"})},
         #models.DateField: {'widget': DateInput(attrs={"style": "width:100vh"})},
         #models.DurationField: {'widget': TextInput(attrs={"style": "width:100vh"})},
         models.ForeignKey: {'widget': Select(attrs={"style": "min-width:100vh"})},
         models.ManyToManyField: {'widget': SelectMultiple(attrs={"style": "min-width:100vh"})},
     }
+
+    readonly_fields = ["created_by", "updated_by", "creation_date", "last_update"]
 
     def save_model(self, request, obj, form, change):
         """ Save user than create or update object on admim """
@@ -57,11 +60,18 @@ class BaseModelAdmin(admin.ModelAdmin):
         message = format_html("<div style='width:0px;'></div>")
         return message
 
-    def double_row(self, first_value, second_value, align="center"):
+    def double_row(self, first_value, second_value, align="center", title="", link=None):
+
+        content = f"{first_value}<br><span style='font-size:9px;color:#777;'>{second_value}</span>"
+        if link:
+            content = (f"<a href='{link}' target='_blank'>"
+                       f"{first_value}<br><span style='font-size:9px;color:#777;'>"
+                       f"{second_value}</span></a>"
+                       )
+
         message = format_html(
-            f"<div style='text-align:{align};white-space: nowrap;'>"
-            f"{first_value}<br><span style='font-size:9px;color:#777;'>"
-            f"{second_value}</span>"
+            f"<div style='text-align:{align};white-space: nowrap;' title='{title}'>"
+            f"{content}"
             f"</div>"
         )
         return message
@@ -76,4 +86,6 @@ class BaseModelAdmin(admin.ModelAdmin):
     updated.allow_tags = True
     updated.short_description = "Atualizado em"
     updated.admin_order_field = 'last_updated'
+
+
 

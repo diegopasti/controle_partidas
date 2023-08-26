@@ -38,6 +38,7 @@ class Player(BaseModel, ResultFields):
 
     user = models.OneToOneField("auth.User", null=True, blank=True, on_delete=models.DO_NOTHING)
     name = models.CharField(_('Nome'), max_length=50, unique=True, blank=False)
+    image = models.ImageField(_("Imagem"), upload_to="players", null=True, blank=True)
     total_bookings = models.IntegerField("Total de Reservas", default=0, blank=True)
     total_matches = models.IntegerField("Total de Partidas", default=0, blank=True)
     total_gols = models.IntegerField("Total de Gols", default=0, blank=True)

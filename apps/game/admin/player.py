@@ -24,13 +24,13 @@ class PlayerAdmin(ResultAdmin):
 
     add_fieldsets = (
         ("Jogador", {
-            "fields": ("name", )
+            "fields": ("name", "image",)
         }),
     )
 
     fieldsets = (
         ("Jogador", {
-            "fields": ("name", "total_matches", "total_gols", "gols_rate", "best_of_team", "best_of_match",)
+            "fields": ("name", "image", "total_matches", "total_gols", "gols_rate", "best_of_team", "best_of_match",)
         }),
 
         ("Partidas", {

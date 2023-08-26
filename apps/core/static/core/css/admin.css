@@ -63,3 +63,9 @@
     width: 100px;
 }
 
+/* Entities */
+.column-owner_with_phone, .column-route, .column-bookings{
+    text-align: center !important;
+    white-space: nowrap;
+    width: 100px;
+}

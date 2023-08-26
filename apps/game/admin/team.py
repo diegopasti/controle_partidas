@@ -15,9 +15,9 @@ class TeamAdmin(ResultAdmin):
     ]
 
     list_display = (
-        #"booking",
-        "code", "name", "best_player", "gols", #"total_rounds", "total_round_duration",
-        #"total_round_average", "column_separator", "created", "updated"
+        "booking",
+        "code", "name", "best_player", "gols", "total_rounds", "total_round_duration",
+        "total_round_average", "column_separator" #, "created", "updated"
     )
 
     fieldsets = (
