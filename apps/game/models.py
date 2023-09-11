@@ -101,9 +101,9 @@ class Booking(BaseModel, ResultFields):
     status = models.CharField("Status", max_length=10, choices=STATUS, default="AGUARDANDO", blank=False)
     players = models.ManyToManyField("Player", verbose_name=_('Jogadores'))
 
-    start = models.DateTimeField(_('Início da Partida'), null=True, blank=True)
-    finish = models.DateTimeField(_('Término da Partida'), null=True, blank=True)
-    duration = models.DurationField(_('Duração Partida'), null=True, blank=True)
+    start = models.DateTimeField(_('Início da Reserva'), null=True, blank=True)
+    finish = models.DateTimeField(_('Término da Reserva'), null=True, blank=True)
+    duration = models.DurationField(_('Duração da Reserva'), null=True, blank=True)
 
     best_player = models.ForeignKey(
         "Player", null=True, blank=True, on_delete=models.DO_NOTHING,

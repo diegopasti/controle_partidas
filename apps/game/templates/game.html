@@ -17,7 +17,35 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-}
+  }
+
+  .team-layer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    background-color: #666;
+    opacity: 0.9;
+  }
+
+  .card {
+    background: #fff;
+  }
+
+  .clock {
+    align-items: center;
+    /*background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid #000;
+    width: 250px;
+    color: #fff;*/
+
+    display: flex;
+    font-size: 60px;
+    justify-content: center;
+    height: 100px;
+
+  }
 </style>
 {% endblock %}
 {% block content %}
@@ -25,12 +53,16 @@ body {
   <div class="row">
     <div class="col">
       {{ match.first_team.name }}
-      <div class="row justify-content-md-center">
+      <div class="row justify-content-md-center team-layer">
 
       {% for player in match.first_team.players.all %}
-        <div class="col">
+        <div class="col" onclick="cliquei({{ match.first_team.id }}, {{ player.id }}, '{{ player.name }}')">
           <div class="card">
-            <img src="/media/{{player.image}}" class="card-img-top img-fluid" alt="..." style="width:145px;">
+            {% if player.image %}
+            <img src="/media/{{player.image}}" class="card-img-top" alt="...">
+            {% else %}
+            <img src="/media/empty.png" class="card-img-top" alt="...">
+            {% endif %}
             <div class="card-body">
               <h6 class="card-title">{{ player.name }}</h6>
               <p class="card-text">dasd</p>
@@ -43,14 +75,15 @@ body {
     </div>
   </div>
 
+  <br>
+
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <img src="/media/{{player.image}}" class="card-img-top img-fluid" alt="..." style="width:145px;">
         <div class="card-body">
-          <h6 class="card-title">{{ player.name }}</h6>
-          <p class="card-text">dasd</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <div class="container">
+            <div class="clock"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -59,16 +92,20 @@ body {
   <div class="row">
     <div class="col">
       {{ match.second_team.name }}
-      <div class="row justify-content-md-center">
+      <div class="row justify-content-md-center team-layer">
 
       {% for player in match.second_team.players.all %}
-        <div class="col">
+        <div class="col" onclick="cliquei(match.second_team.id, player.id, player.name)">
           <div class="card">
-            <img src="..." class="card-img-top" alt="...">
+            {% if player.image %}
+            <img src="/media/{{player.image}}" class="card-img-top" alt="...">
+            {% else %}
+            <img src="/media/empty.png" class="card-img-top" alt="...">
+            {% endif %}
             <div class="card-body">
               <h6 class="card-title">{{ player.name }}</h6>
               <p class="card-text">dasd</p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
+              <a href="#" class="btn btn-primary">Gol</a>
             </div>
           </div>
         </div>
@@ -77,4 +114,28 @@ body {
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function cliquei(team, player_id, player_name){
+    alert("fez gol "+player_name);
+  }
+
+  const getHours = () => {
+    const clock = document.getElementsByClassName('clock')[0]
+    const date = new Date()
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    const seconds = date.getSeconds()
+    const hour = hours < 10 ? `0${hours}` : hours
+    const minute = minutes < 10 ? `0${minutes}` : minutes
+    const second = seconds < 10 ? `0${seconds}` : seconds
+    clock.innerHTML = `${hour}:${minute}:${second}`
+  }
+
+  setInterval(() => {
+    getHours()
+  }, 1000)
+</script>
 {% endblock %}

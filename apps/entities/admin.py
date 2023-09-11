@@ -79,12 +79,12 @@ class GroupAdmin(BaseModelAdmin):
     actions_on_top = False
     search_fields = ['owner']
     list_filter = ["owner", "status", "type", "days"]
-    list_display = ["group_owner", "days", "bookings", "created", "updated"]
+    list_display = ["group_owner", "total_bookings", "members_and_type", "created", "updated"]
 
     fieldsets = (
         ("Informações Gerais", {
             "fields": (
-                "owner", "name", "status", "type", "days", "bookings"
+                "name", "owner", "members", "status", "type", "days", "bookings",
             )
         }),
 
@@ -97,7 +97,7 @@ class GroupAdmin(BaseModelAdmin):
 
     add_fieldsets = (
         ("Informações Gerais", {
-            "fields": ("owner", "name", "type", "days")
+            "fields": ("name", "owner", "members", "type",  "days")
         }),
     )
 
@@ -105,12 +105,34 @@ class GroupAdmin(BaseModelAdmin):
 
     def group_owner(self, obj):
         return self.double_row(
-            f"{obj.name.upper()} ({obj.type})", f"{obj.owner.get_full_name().upper()}", "left"
+            f"{obj.name.upper()}",
+            f"DIAS DE JOGOS: {obj.days}", "left"
+        )
+
+    def total_bookings(self, obj):
+        return self.double_row(
+            f"{obj.bookings}",
+            f"", "center"
+        )
+
+    def members_and_type(self, obj):
+        members = f"{obj.members.all().count()} PARTICIPANTES"
+        return self.double_row(
+            obj.type,
+            members, "center"
         )
 
     group_owner.allow_tags = True
     group_owner.short_description = "GRUPO"
     group_owner.admin_order_field = 'name'
+
+    total_bookings.allow_tags = True
+    total_bookings.short_description = "RESERVAS"
+    total_bookings.admin_order_field = 'bookings'
+
+    members_and_type.allow_tags = True
+    members_and_type.short_description = "TIPO DO GRUPO"
+    members_and_type.admin_order_field = 'type'
 
 
 @admin.register(Area)

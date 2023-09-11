@@ -64,7 +64,8 @@
 }
 
 /* Entities */
-.column-owner_with_phone, .column-route, .column-bookings{
+.column-owner_with_phone, .column-route, .column-bookings, .column-teams, .column-matches, .column-best_player
+.column-time, .column-total_bookings, .column-members_and_type, .column-time, .column-status{
     text-align: center !important;
     white-space: nowrap;
     width: 100px;

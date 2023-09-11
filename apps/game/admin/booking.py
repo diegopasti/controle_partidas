@@ -15,7 +15,8 @@ class BookingAdmin(ResultAdmin):
     search_fields = ['group__name']
 
     list_display = (
-        "local", "player_group", "time", "status", "column_separator", "best_player", "teams", "matches", "start", "finish", "duration",
+        "local", "player_group", "time", "status", "column_separator", "matches", "teams",
+        "best_player", "start", "finish", "duration",
     )
 
     fieldsets = (

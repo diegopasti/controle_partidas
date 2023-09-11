@@ -68,6 +68,7 @@ class Group(BaseModel):
     type = models.CharField("Tipo de Grupo", max_length=20, choices=TYPE, blank=False)
     days = MultiSelectField("Dias de Jogo", choices=DAYS, max_choices=7, max_length=80, null=True, blank=True)
     bookings = models.IntegerField("Total de Reservas", default=0, blank=True)
+    members = models.ManyToManyField("game.Player", verbose_name=_('Membros'), blank=True)
 
     def __str__(self):
         return self.owner.__str__().upper()
