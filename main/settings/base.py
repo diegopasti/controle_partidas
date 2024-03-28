@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'django_admin_filters',
+    #'django_admin_filters',
     'django_admin_geomap',
 
     'apps.core',
@@ -92,7 +92,6 @@ DATABASES = {
         'PORT': config('PORT'),
     }
 }
-
 
 
 # Password validation
