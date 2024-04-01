@@ -35,7 +35,7 @@ class Player(BaseModel, ResultFields):
         verbose_name_plural = "Jogadores"
 
     user = models.OneToOneField("auth.User", null=True, blank=True, on_delete=models.DO_NOTHING)
-    name = models.CharField(_('Nome'), max_length=50, unique=True, blank=False)
+    name = models.CharField(_("Nome"), max_length=50, unique=True, blank=False)
     image = models.ImageField(_("Imagem"), upload_to="players", null=True, blank=True)
     total_bookings = models.IntegerField("Total de Reservas", default=0, blank=True)
     total_matches = models.IntegerField("Total de Partidas", default=0, blank=True)
@@ -53,8 +53,8 @@ class Player(BaseModel, ResultFields):
         help_text="Número de vezes em que foi o melhor da partida"
     )
 
-    bookings = models.ManyToManyField('Booking', verbose_name=_("Reservas"), blank=True)
-    matches = models.ManyToManyField('Match', verbose_name=_("Rodadas"), blank=True)
+    bookings = models.ManyToManyField("Booking", verbose_name=_("Reservas"), blank=True)
+    matches = models.ManyToManyField("Match", verbose_name=_("Rodadas"), blank=True)
 
     def __str__(self):
         return self.name
@@ -68,11 +68,11 @@ class Booking(BaseModel, ResultFields):
         unique_together = [["company", "area", "date", "hour"]]
 
     STATUS = (
-        ('AGUARDANDO', 'AGUARDANDO'),
-        ('CONFIRMADA', 'CONFIRMADA'),
-        ('INICIADA', 'INICIADA'),
-        ('FINALIZADA', 'FINALIZADA'),
-        ('CANCELADA', 'CANCELADA'),
+        ("AGUARDANDO", "AGUARDANDO"),
+        ("CONFIRMADA", "CONFIRMADA"),
+        ("INICIADA", "INICIADA"),
+        ("FINALIZADA", "FINALIZADA"),
+        ("CANCELADA", "CANCELADA"),
     )
 
     company = models.ForeignKey(
@@ -94,14 +94,15 @@ class Booking(BaseModel, ResultFields):
     )
 
     date = models.DateField(_("Data"), null=False)
-    hour = models.TimeField(_('Horário'), null=False)
+    hour = models.TimeField(_("Horário"), null=False)
 
     status = models.CharField("Status", max_length=10, choices=STATUS, default="AGUARDANDO", blank=False)
-    players = models.ManyToManyField("Player", verbose_name=_('Jogadores'))
+    players = models.ManyToManyField("Player", verbose_name=_("Jogadores"))
+    goalkeeper = models.ManyToManyField("Player", verbose_name=_("Goleiros"), related_name="goalkeepers")
 
-    start = models.DateTimeField(_('Início da Reserva'), null=True, blank=True)
-    finish = models.DateTimeField(_('Término da Reserva'), null=True, blank=True)
-    duration = models.DurationField(_('Duração da Reserva'), null=True, blank=True)
+    start = models.DateTimeField(_("Início da Reserva"), null=True, blank=True)
+    finish = models.DateTimeField(_("Término da Reserva"), null=True, blank=True)
+    duration = models.DurationField(_("Duração da Reserva"), null=True, blank=True)
 
     best_player = models.ForeignKey(
         "Player", null=True, blank=True, on_delete=models.DO_NOTHING,
@@ -160,7 +161,7 @@ class Team(BaseModel, ResultFields):
 
     code = models.IntegerField("Codigo", default=1, null=True, blank=True)
 
-    name = models.CharField(_('Nome do Time'), max_length=50, blank=False)
+    name = models.CharField(_("Nome do Time"), max_length=50, blank=False)
 
     players = models.ManyToManyField("Player", verbose_name="Jogadores")
 
@@ -203,4 +204,4 @@ class Gol(BaseModel):
         related_name="%(app_label)s_%(class)s_opponent"
     )
 
-    creation_date = models.DateTimeField(_('Horário'), null=True, auto_now_add=True)
+    creation_date = models.DateTimeField(_("Horário"), null=True, auto_now_add=True)
