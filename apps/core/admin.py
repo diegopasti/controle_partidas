@@ -4,11 +4,12 @@ from django.db import models
 from django.forms import TextInput, Select, SelectMultiple
 from django.utils.html import format_html
 
-from django_admin_filters import MultiChoice
+#from django_admin_filters import MultiChoice
+#from django_admin_filter.filters import CustomFilter
+#from django_filters import MultiChoiceFilter
 
-
-class StatusFilter(MultiChoice):
-    FILTER_LABEL = "By status"
+#class StatusFilter(MultiChoice):
+#   FILTER_LABEL = "By status"
 
 
 class BaseModelAdmin(admin.ModelAdmin):

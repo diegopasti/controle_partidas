@@ -68,10 +68,10 @@ class Group(BaseModel):
     type = models.CharField("Tipo de Grupo", max_length=20, choices=TYPE, blank=False)
     days = MultiSelectField("Dias de Jogo", choices=DAYS, max_choices=7, max_length=80, null=True, blank=True)
     bookings = models.IntegerField("Total de Reservas", default=0, blank=True)
-    members = models.ManyToManyField("game.Player", verbose_name=_('Membros'), blank=True)
+    members = models.ManyToManyField("auth.User", verbose_name=_('Membros'), related_name="members", blank=True)
 
     def __str__(self):
-        return self.owner.__str__().upper()
+        return self.name.__str__().title()
 
 
 class Area(BaseModel):
@@ -104,9 +104,9 @@ class Area(BaseModel):
     )
 
     def __str__(self):
-        message = f"{self.company.name} - {self.type}"
+        message = f"{self.company.name.title()} - {self.type.__str__().title()}"
         if self.name:
-            message += f" - {self.name}"
+            message += f" - {self.name.__str__().title()}"
         return message
 
 

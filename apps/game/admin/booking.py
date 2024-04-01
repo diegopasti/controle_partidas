@@ -47,7 +47,7 @@ class BookingAdmin(ResultAdmin):
 
     def get_fieldsets(self, request, obj=None):
         if not obj:
-             return self.add_fieldsets
+            return self.add_fieldsets
         return super(BookingAdmin, self).get_fieldsets(request, obj)
 
     @admin.action(description="Sortear Times")
@@ -61,18 +61,20 @@ class BookingAdmin(ResultAdmin):
             booking.total_players = booking.players.count()
             booking.total_teams = ceil(booking.total_players/max_players)
             booking.save()
-
             players = random.sample(list(booking.players.all()), booking.total_players)
 
             for item in range(booking.total_teams):
                 team = Team()
+                team.booking = booking
                 team.code = item+1
                 team.name = f"Time{item+1}"
                 initial_position = item*max_players
                 end_position = (item+1)*max_players
+
                 team.save()
                 team.players.set(players[initial_position:end_position])
                 team.save()
+                print("TIME:", team)
 
     def player_group(self, obj):
         return self.double_row(
