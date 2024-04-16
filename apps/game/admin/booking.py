@@ -26,6 +26,10 @@ class BookingAdmin(ResultAdmin):
             )
         }),
 
+        ("Jogadores", {
+            "fields": ("players", "goalkeepers", "goalkeepers_fixed")
+        }),
+
         ("Resultado", {
             "fields": (
                 "best_player", "total_players", "total_teams", "total_matches", "total_gols",
@@ -39,7 +43,7 @@ class BookingAdmin(ResultAdmin):
         }),
 
         ("Jogadores", {
-            "fields": ("owner", "group", "players")
+            "fields": ("owner", "group", "players", "goalkeepers", "goalkeepers_fixed")
         }),
     )
 
@@ -53,27 +57,46 @@ class BookingAdmin(ResultAdmin):
     @admin.action(description="Sortear Times")
     def sort_teams(self, request, queryset):
         for booking in queryset:
-            if booking.total_teams > 0:
-                print("Reserva já tem times definidos")
-                return False
+            #if booking.total_teams > 0:
+            #    print("Reserva já tem times definidos")
+            #    return False
 
             max_players = booking.area.players
-            booking.total_players = booking.players.count()
-            booking.total_teams = ceil(booking.total_players/max_players)
-            booking.save()
-            players = random.sample(list(booking.players.all()), booking.total_players)
+            total_goalkeepers = booking.goalkeepers.count()
+            sortable_players = booking.players
+
+            goalkeepers_fixed = booking.goalkeepers_fixed and total_goalkeepers == 2
+            if goalkeepers_fixed:
+                print("GOLEIROS FIXOS, ENTAO SO SORTEA NA LISTA DE JOGADORES")
+                max_players -= 2
+            else:
+                print("SEM GOLEIROS FIXOS, ENTAO SORTEIA TODOS JOGADORES")
+                sortable_players += booking.goalkeepers
+
+            print("VOU SORTEAR:", sortable_players.all(), sortable_players.count())
+            print("VOU SORTEAR:", sortable_players.count() / max_players)
+
+            booking.total_players = booking.players.count() + total_goalkeepers
+            booking.total_teams = ceil(sortable_players.count()/max_players)
+
+
+            #booking.save()
+            players = random.sample(list(sortable_players.all()), sortable_players.count())
+            print("PLAYERS:",players)
+
+            #if booking.total_players % booking.area.players:
 
             for item in range(booking.total_teams):
                 team = Team()
-                team.booking = booking
+                #team.booking = booking
                 team.code = item+1
                 team.name = f"Time{item+1}"
                 initial_position = item*max_players
                 end_position = (item+1)*max_players
 
-                team.save()
-                team.players.set(players[initial_position:end_position])
-                team.save()
+                #team.save()
+                #team.players.set(players[initial_position:end_position])
+                #team.save()
                 print("TIME:", team)
 
     def player_group(self, obj):

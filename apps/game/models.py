@@ -98,7 +98,11 @@ class Booking(BaseModel, ResultFields):
 
     status = models.CharField("Status", max_length=10, choices=STATUS, default="AGUARDANDO", blank=False)
     players = models.ManyToManyField("Player", verbose_name=_("Jogadores"))
-    goalkeeper = models.ManyToManyField("Player", verbose_name=_("Goleiros"), related_name="goalkeepers")
+    goalkeepers = models.ManyToManyField("Player", verbose_name=_("Goleiros"), related_name="goalkeepers")
+    goalkeepers_fixed = models.BooleanField(
+        "Goleiros Fixos", null=True,
+        help_text="Quando houver apenas dois goleiros eles poderão ser fixos e os times sorteados terão apenas 4 jogadores."
+    )
 
     start = models.DateTimeField(_("Início da Reserva"), null=True, blank=True)
     finish = models.DateTimeField(_("Término da Reserva"), null=True, blank=True)
